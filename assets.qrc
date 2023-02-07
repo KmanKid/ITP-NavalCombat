@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="bs1_little">assets/ships/blue_ship_1.png</file>
+        <file alias="bs2_little">assets/ships/blue_ship_2.png</file>
+        <file alias="bs3_little">assets/ships/blue_ship_3.png</file>
+        <file alias="bs4_little">assets/ships/blue_ship_4.png</file>
+        <file alias="rs1_little">assets/ships/red_ship_1.png</file>
+        <file alias="rs2_little">assets/ships/red_ship_2.png</file>
+        <file alias="rs3_little">assets/ships/red_ship_3.png</file>
+        <file alias="rs4_little">assets/ships/red_ship_4.png</file>
+        <file alias="bs4_big">assets/ships/size_four_blue.png</file>
+        <file alias="rs4_big">assets/ships/size_four_red.png</file>
+        <file alias="bs1_big">assets/ships/size_one_blue.png</file>
+        <file alias="rs1_big">assets/ships/size_one_red.png</file>
+        <file alias="bs3_big">assets/ships/size_three_blue.png</file>
+        <file alias="rs3_big">assets/ships/size_three_red.png</file>
+        <file alias="bs2_big">assets/ships/size_two_blue.png</file>
+        <file alias="rs2_big">assets/ships/size_two_red.png</file>
+        <file alias="grid">assets/grid.png</file>
+        <file alias="logo">assets/logo_nc.png</file>
+        <file alias="vs">assets/vs.png</file>
+    </qresource>
+</RCC>
