@@ -16,8 +16,10 @@
         <file alias="rs3_big">assets/ships/size_three_red.png</file>
         <file alias="bs2_big">assets/ships/size_two_blue.png</file>
         <file alias="rs2_big">assets/ships/size_two_red.png</file>
-        <file alias="grid">assets/grid.png</file>
         <file alias="logo">assets/logo_nc.png</file>
         <file alias="vs">assets/vs.png</file>
+        <file>assets/grid_cell_empty.png</file>
+        <file>assets/grid_cell_hit.png</file>
+        <file>assets/grid_cell_miss.png</file>
     </qresource>
 </RCC>
