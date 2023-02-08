@@ -1,8 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "gridcell.h"
 #include <QMainWindow>
 #include <QLabel>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,10 +17,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QLabel* gridLeft[10][10];
+    GridCell* gridLeft[10][10];
 
 public slots:
-    void showChangeOnHit(int x, int y);
+    void showChangeOnHit();
 private:
     Ui::MainWindow *ui;
 };
