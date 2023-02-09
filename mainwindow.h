@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include "gridcell.h"
-#include "client.h"
 #include <QMainWindow>
 #include <QLabel>
 #include <QPushButton>
+#include <QWebSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,8 +23,10 @@ public:
 
 public slots:
     void showChangeOnHit();
+    void youHaveGotMail(QString message);
+
 private:
-    Client client;
     Ui::MainWindow *ui;
+    QWebSocket client;
 };
 #endif // MAINWINDOW_H

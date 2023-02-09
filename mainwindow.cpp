@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    client.start("127.0.0.1",8888);
+    client.open(QUrl("ws://127.0.0.1:8888"));
+    connect(&client, &QWebSocket::textMessageReceived,this, &MainWindow::youHaveGotMail);
     ui->setupUi(this);
     for (int x = 0; x < 10; x++)
     {
@@ -27,6 +28,11 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
+void MainWindow::youHaveGotMail(QString message)
+{
+    qDebug() << message;
+}
+
 void MainWindow::showChangeOnHit()
 {
     GridCell* buttonSender = qobject_cast<GridCell*>(sender());
@@ -34,10 +40,13 @@ void MainWindow::showChangeOnHit()
     qDebug() << "X" << buttonSender->x+1;
     qDebug() << "Y" << buttonSender->y+1;
     //send the coordinates to the server
-    client.shoot(buttonSender->x,buttonSender->y);
+    QString message = QString("x:"+QString::number(buttonSender->x)
+                             +"y:"+QString::number(buttonSender->y));
+    client.sendTextMessage(message);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    client.close();
 }
