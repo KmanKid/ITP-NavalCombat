@@ -1,6 +1,7 @@
 #ifndef GRIDCELL_H
 #define GRIDCELL_H
 #include <QPushButton>
+#include <QTcpServer>
 
 class GridCell : public QPushButton
 {
@@ -10,6 +11,7 @@ public:
     virtual ~GridCell();
     int x;
     int y;
+    //property for field status
 };
 
 #endif // GRIDCELL_H
