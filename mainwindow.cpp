@@ -31,6 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::youHaveGotMail(QString message)
 {
     qDebug() << message;
+    // e.g sFS-left-0-0-2
+    QStringList mSplit = message.split("-");
+    if(mSplit[0] == "sFS")
+    {
+        this->setFieldState(mSplit[1],mSplit[2].toInt(),mSplit[3].toInt(),mSplit[4].toInt());
+    }
 }
 
 void MainWindow::showChangeOnHit()
@@ -39,8 +45,8 @@ void MainWindow::showChangeOnHit()
     buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
     //send the coordinates to the server
     buttonSender->state = 0;
-    QString message = QString("x:"+QString::number(buttonSender->x)
-                             +"_y:"+QString::number(buttonSender->y));
+    QString message = QString("clk-"+QString::number(buttonSender->x)
+                             +"-"+QString::number(buttonSender->y));
     client.sendTextMessage(message);
 }
 
