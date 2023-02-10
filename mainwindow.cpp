@@ -37,12 +37,50 @@ void MainWindow::showChangeOnHit()
 {
     GridCell* buttonSender = qobject_cast<GridCell*>(sender());
     buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
-    qDebug() << "X" << buttonSender->x+1;
-    qDebug() << "Y" << buttonSender->y+1;
     //send the coordinates to the server
+    buttonSender->state = 0;
     QString message = QString("x:"+QString::number(buttonSender->x)
-                             +"y:"+QString::number(buttonSender->y));
+                             +"_y:"+QString::number(buttonSender->y));
     client.sendTextMessage(message);
+}
+
+void MainWindow::setFieldState(QString side,int x, int y, int state)
+{
+    QString iconPath = "";
+    switch(state)
+    {
+        case 0:
+            iconPath = ":/assets/grid_cell_empty.png";
+            break;
+        case 1:
+            iconPath = ":/assets/grid_cell_miss.png";
+            break;
+        case 2:
+            iconPath = ":/assets/gridcell_blue_full.png";
+            break;
+        case 3:
+            iconPath = ":/assets/gridcell_blue_hit.png";
+            break;
+        case 4:
+            iconPath = ":/assets/gridcell_red_hit.png";
+            break;
+        case 5:
+            iconPath = ":/assets/gridcell_red_full.png";
+            break;
+        default:
+            iconPath = ":/assets/grid_cell_empty.png";
+    }
+
+    if(side == "left")
+    {
+        gridLeft[x][y]->setIcon(QIcon(QPixmap(iconPath)));
+
+    }
+    if(side == "right")
+    {
+        gridRight[x][y]->setIcon(QIcon(QPixmap(iconPath)));
+    }
+
 }
 
 MainWindow::~MainWindow()

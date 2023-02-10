@@ -46,17 +46,17 @@
    <widget class="QLabel" name="logo">
     <property name="geometry">
      <rect>
-      <x>285</x>
-      <y>38</y>
-      <width>434</width>
-      <height>86</height>
+      <x>176</x>
+      <y>13</y>
+      <width>647</width>
+      <height>130</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="assets.qrc">:/logo</pixmap>
+     <pixmap resource="assets.qrc">:/assets/nc_logo.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="blue_overview_3_1">

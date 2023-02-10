@@ -29,3 +29,32 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     assets.qrc
+
+DISTFILES += \
+    assets/grid_cell_empty.png \
+    assets/grid_cell_hit.png \
+    assets/grid_cell_miss.png \
+    assets/grid_cell_on_hover.png \
+    assets/gridcell_blue_full.png \
+    assets/gridcell_blue_hit.png \
+    assets/gridcell_red_full.png \
+    assets/gridcell_red_hit.png \
+    assets/logo_nc.png \
+    assets/nc_logo.png \
+    assets/ships/blue_ship_1.png \
+    assets/ships/blue_ship_2.png \
+    assets/ships/blue_ship_3.png \
+    assets/ships/blue_ship_4.png \
+    assets/ships/red_ship_1.png \
+    assets/ships/red_ship_2.png \
+    assets/ships/red_ship_3.png \
+    assets/ships/red_ship_4.png \
+    assets/ships/size_four_blue.png \
+    assets/ships/size_four_red.png \
+    assets/ships/size_one_blue.png \
+    assets/ships/size_one_red.png \
+    assets/ships/size_three_blue.png \
+    assets/ships/size_three_red.png \
+    assets/ships/size_two_blue.png \
+    assets/ships/size_two_red.png \
+    assets/vs.png

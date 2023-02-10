@@ -11,6 +11,7 @@ public:
     virtual ~GridCell();
     int x;
     int y;
+    int state;
     //property for field status
 };
 

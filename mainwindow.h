@@ -24,6 +24,7 @@ public:
 public slots:
     void showChangeOnHit();
     void youHaveGotMail(QString message);
+    void setFieldState(QString side,int x, int y, int state);
 
 private:
     Ui::MainWindow *ui;

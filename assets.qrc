@@ -21,5 +21,11 @@
         <file>assets/grid_cell_empty.png</file>
         <file>assets/grid_cell_hit.png</file>
         <file>assets/grid_cell_miss.png</file>
+        <file>assets/nc_logo.png</file>
+        <file>assets/grid_cell_on_hover.png</file>
+        <file>assets/gridcell_blue_full.png</file>
+        <file>assets/gridcell_blue_hit.png</file>
+        <file>assets/gridcell_red_full.png</file>
+        <file>assets/gridcell_red_hit.png</file>
     </qresource>
 </RCC>
