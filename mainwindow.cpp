@@ -17,13 +17,14 @@ MainWindow::MainWindow(QWidget *parent)
             this->gridLeft[x][y]->setGeometry(QRect(44+(x*40),155+(y*40),40,40));
             this->gridLeft[x][y]->setIcon(QIcon(QPixmap(":/assets/grid_cell_empty.png")));
             this->gridLeft[x][y]->setIconSize(QSize(40,40));
+            connect(gridLeft[x][y], SIGNAL(clicked()),this, SLOT(selectShips()));
 
             //Right grid to shoot at enemy
             this->gridRight[x][y] = new GridCell(this,x,y);
             this->gridRight[x][y]->setGeometry(QRect(556 +(x*40),155+(y*40),40,40));
             this->gridRight[x][y]->setIcon(QIcon(QPixmap(":/assets/grid_cell_empty.png")));
             this->gridRight[x][y]->setIconSize(QSize(40,40));
-            connect(gridRight[x][y], SIGNAL(clicked()),this, SLOT(showChangeOnHit()));
+            connect(gridRight[x][y], SIGNAL(clicked()),this, SLOT(shoot()));
         }
     }
 }
@@ -33,19 +34,19 @@ void MainWindow::youHaveGotMail(QString message)
     qDebug() << message;
     // e.g sFS-left-0-0-2
     QStringList mSplit = message.split("-");
-    if(mSplit[0] == "sFS")
+    if(mSplit[0] == "setFieldState")
     {
         this->setFieldState(mSplit[1],mSplit[2].toInt(),mSplit[3].toInt(),mSplit[4].toInt());
     }
 }
 
-void MainWindow::showChangeOnHit()
+void MainWindow::shoot()
 {
     GridCell* buttonSender = qobject_cast<GridCell*>(sender());
     buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
     //send the coordinates to the server
     buttonSender->state = 0;
-    QString message = QString("clk-"+QString::number(buttonSender->x)
+    QString message = QString("shot-"+QString::number(buttonSender->x)
                              +"-"+QString::number(buttonSender->y));
     client.sendTextMessage(message);
 }
@@ -73,6 +74,9 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
         case 5:
             iconPath = ":/assets/gridcell_red_full.png";
             break;
+        case 6:
+            iconPath = ":/assets/grid_cell_on_hover.png";
+            break;
         default:
             iconPath = ":/assets/grid_cell_empty.png";
     }
@@ -87,6 +91,132 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
         gridRight[x][y]->setIcon(QIcon(QPixmap(iconPath)));
     }
 
+}
+
+void MainWindow::selectShips()
+{
+    GridCell* buttonSender = qobject_cast<GridCell*>(sender());
+    int x = buttonSender->x;
+    int y = buttonSender->y;
+    int shipSize = 0;
+    if (shipNumber <= 3)
+    {
+        shipSize = 1;
+    }
+    if (shipNumber > 3 && shipNumber <= 6)
+    {
+        shipSize = 2;
+    }
+    if (shipNumber > 6 && shipNumber <= 8)
+    {
+        shipSize = 3;
+    }
+    if (shipNumber == 9)
+    {
+        shipSize = 4;
+    }
+    if (!(shipNumber > 9))
+    {
+
+        if(!isSelctingShip)
+        {
+            //Player wants to select a ship now --> store x and y for preview removal
+            shipTempX = x;
+            shipTempY = y;
+            isSelctingShip = true;
+            this->setFieldState("left",x,y,2);
+            if(shipSize == 1)
+            {
+                isSelctingShip = false;
+                sendShip(x,y,0); //implementation needed
+                shipNumber++;
+            }else
+            {
+                togglePreview(x, y, shipSize, false);
+            }
+        }else
+        {
+            bool valid = (shipTempX == x || shipTempY == y); // further validate --> accurate koordinates not just axis
+            togglePreview(shipTempX, shipTempY, shipSize, true);
+            if(valid)
+            {
+                qDebug() << x  << ":" << y;
+                qDebug() << shipTempX << ":" << shipTempY;
+                if(shipTempX == x)
+                {
+                    if (shipTempY < y)
+                    {
+                        for (int i = 0; i < shipSize; i++)
+                        {
+                            this->setFieldState("left",shipTempX,shipTempY+i,2);
+                        }
+                    }else
+                    {
+                        for (int i = 0; i < shipSize; i++)
+                        {
+                            this->setFieldState("left",shipTempX,shipTempY-i,2);
+                        }
+                    }
+                }
+                if(shipTempY == y)
+                {
+                    if (shipTempX < x)
+                    {
+                        for (int i = 0; i < shipSize; i++)
+                        {
+                            this->setFieldState("left",shipTempX+i,shipTempY,2);
+                        }
+                    }else
+                    {
+                        for (int i = 0; i < shipSize; i++)
+                        {
+                            this->setFieldState("left",shipTempX-i,shipTempY,2);
+                        }
+                    }
+
+                }
+            }
+
+            isSelctingShip = false;
+            sendShip(x,y,0); //implementation needed
+            shipNumber++;
+        }
+    }
+    qDebug() << "Size:" << shipSize << "Number:" << shipNumber;
+}
+
+void MainWindow::togglePreview(int x, int y, int size, bool remove)
+{
+    int state = 6;
+    if (remove)
+    {
+        state = 0;
+    }
+    int previewXPlus = x + size -1;
+    int previewXMinus = x - size +1;
+    int previewYPlus = y + size -1;
+    int previewYMinus = y - size +1;
+    if (previewXPlus >= 0 && previewXPlus < 10)
+    {
+        this->setFieldState("left",previewXPlus,y,state);
+    }
+    if (previewXMinus >= 0 && previewXMinus < 10)
+    {
+        this->setFieldState("left",previewXMinus,y,state);
+    }
+    if (previewYPlus >= 0 && previewYPlus < 10)
+    {
+        this->setFieldState("left",x,previewYPlus,state);
+    }
+    if (previewYMinus >= 0 && previewYMinus < 10)
+    {
+        this->setFieldState("left",x,previewYMinus,state);
+    }
+}
+
+void MainWindow::sendShip(int x, int y, int orientation)
+{
+    //send ship to server, so that he can store it
 }
 
 MainWindow::~MainWindow()

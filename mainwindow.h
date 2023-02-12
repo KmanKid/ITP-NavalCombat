@@ -22,12 +22,19 @@ public:
     GridCell* gridRight[10][10];
 
 public slots:
-    void showChangeOnHit();
+    void shoot();
     void youHaveGotMail(QString message);
     void setFieldState(QString side,int x, int y, int state);
+    void selectShips();
 
 private:
     Ui::MainWindow *ui;
     QWebSocket client;
+    int shipNumber = 0;
+    int shipTempX = 0;
+    int shipTempY = 0;
+    bool isSelctingShip = false;
+    void sendShip(int x, int y, int orientation);
+    void togglePreview(int x, int y, int size, bool remove = false);
 };
 #endif // MAINWINDOW_H

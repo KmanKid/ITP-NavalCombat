@@ -398,6 +398,24 @@
      <pixmap resource="assets.qrc">:/rs4_little</pixmap>
     </property>
    </widget>
+   <widget class="QLabel" name="manual">
+    <property name="geometry">
+     <rect>
+      <x>178</x>
+      <y>130</y>
+      <width>641</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Fira Code</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>
