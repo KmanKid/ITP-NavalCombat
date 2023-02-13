@@ -34,7 +34,7 @@ private:
     int shipTempX = 0;
     int shipTempY = 0;
     bool isSelctingShip = false;
-    void sendShip(int x, int y, int orientation);
+    void sendShip(int x, int y,int size, int orientation, int shipNumber);
     void togglePreview(int x, int y, int size, bool remove = false);
 };
 #endif // MAINWINDOW_H

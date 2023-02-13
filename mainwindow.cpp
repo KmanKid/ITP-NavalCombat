@@ -84,11 +84,13 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
     if(side == "left")
     {
         gridLeft[x][y]->setIcon(QIcon(QPixmap(iconPath)));
+        gridLeft[x][y]->state = state;
 
     }
     if(side == "right")
     {
         gridRight[x][y]->setIcon(QIcon(QPixmap(iconPath)));
+        gridRight[x][y]->state = state;
     }
 
 }
@@ -115,7 +117,7 @@ void MainWindow::selectShips()
     {
         shipSize = 4;
     }
-    if (!(shipNumber > 9))
+    if (!(shipNumber > 9) && buttonSender->state != 2)
     {
 
         if(!isSelctingShip)
@@ -128,7 +130,7 @@ void MainWindow::selectShips()
             if(shipSize == 1)
             {
                 isSelctingShip = false;
-                sendShip(x,y,0); //implementation needed
+                sendShip(x,y,shipSize,0,shipNumber); //implementation needed
                 shipNumber++;
             }else
             {
@@ -137,9 +139,14 @@ void MainWindow::selectShips()
         }else
         {
             bool valid = (shipTempX == x || shipTempY == y); // further validate --> accurate koordinates not just axis
-            togglePreview(shipTempX, shipTempY, shipSize, true);
-            if(valid)
+            bool validOnXCoord = (x + shipSize-1 == shipTempX) || (x - shipSize+1 == shipTempX);
+            bool validOnYCoord = (y + shipSize-1 == shipTempY) || (y - shipSize+1 == shipTempY);
+            qDebug() << "validX: " << validOnXCoord;
+            qDebug() << "validY: " << validOnYCoord;
+
+            if(valid && (validOnXCoord || validOnYCoord))
             {
+                togglePreview(shipTempX, shipTempY, shipSize, true);
                 qDebug() << x  << ":" << y;
                 qDebug() << shipTempX << ":" << shipTempY;
                 if(shipTempX == x)
@@ -150,12 +157,14 @@ void MainWindow::selectShips()
                         {
                             this->setFieldState("left",shipTempX,shipTempY+i,2);
                         }
+                        sendShip(shipTempX,shipTempY,shipSize,1,shipNumber);
                     }else
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
                             this->setFieldState("left",shipTempX,shipTempY-i,2);
                         }
+                        sendShip(x,y,shipSize,1,shipNumber);
                     }
                 }
                 if(shipTempY == y)
@@ -166,20 +175,21 @@ void MainWindow::selectShips()
                         {
                             this->setFieldState("left",shipTempX+i,shipTempY,2);
                         }
+                        sendShip(shipTempX,shipTempY,shipSize,0,shipNumber);
                     }else
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
                             this->setFieldState("left",shipTempX-i,shipTempY,2);
                         }
+                        sendShip(x,y,shipSize,0,shipNumber);
                     }
 
                 }
+                isSelctingShip = false;
+                //implementation needed
+                shipNumber++;
             }
-
-            isSelctingShip = false;
-            sendShip(x,y,0); //implementation needed
-            shipNumber++;
         }
     }
     qDebug() << "Size:" << shipSize << "Number:" << shipNumber;
@@ -198,25 +208,44 @@ void MainWindow::togglePreview(int x, int y, int size, bool remove)
     int previewYMinus = y - size +1;
     if (previewXPlus >= 0 && previewXPlus < 10)
     {
-        this->setFieldState("left",previewXPlus,y,state);
+        if(gridLeft[previewXPlus][y]->state != 2)
+        {
+            this->setFieldState("left",previewXPlus,y,state);
+        }
     }
     if (previewXMinus >= 0 && previewXMinus < 10)
     {
-        this->setFieldState("left",previewXMinus,y,state);
+        if(gridLeft[previewXMinus][y]->state != 2)
+        {
+            this->setFieldState("left",previewXMinus,y,state);
+        }
     }
     if (previewYPlus >= 0 && previewYPlus < 10)
     {
-        this->setFieldState("left",x,previewYPlus,state);
+        if(gridLeft[x][previewYPlus]->state != 2)
+        {
+            this->setFieldState("left",x,previewYPlus,state);
+        }
     }
     if (previewYMinus >= 0 && previewYMinus < 10)
     {
-        this->setFieldState("left",x,previewYMinus,state);
+        if(gridLeft[x][previewYMinus]->state != 2)
+        {
+            this->setFieldState("left",x,previewYMinus,state);
+        }
     }
 }
 
-void MainWindow::sendShip(int x, int y, int orientation)
+void MainWindow::sendShip(int x, int y,int size, int orientation, int number)
 {
     //send ship to server, so that he can store it
+    //server needs
+    QString message = QString("newShip-"+QString::number(x)
+                             +"-"+QString::number(y)
+                             +"-"+QString::number(size)
+                             +"-"+QString::number(orientation)
+                             +"-"+QString::number(number));
+    client.sendTextMessage(message);
 }
 
 MainWindow::~MainWindow()
