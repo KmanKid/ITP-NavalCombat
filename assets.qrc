@@ -27,5 +27,6 @@
         <file>assets/gridcell_blue_hit.png</file>
         <file>assets/gridcell_red_full.png</file>
         <file>assets/gridcell_red_hit.png</file>
+        <file>assets/gridcell_blue_full_preview.png</file>
     </qresource>
 </RCC>
