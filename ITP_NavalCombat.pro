@@ -36,11 +36,16 @@ DISTFILES += \
     assets/grid_cell_miss.png \
     assets/grid_cell_on_hover.png \
     assets/gridcell_blue_full.png \
+    assets/gridcell_blue_full_preview.png \
     assets/gridcell_blue_hit.png \
     assets/gridcell_red_full.png \
     assets/gridcell_red_hit.png \
     assets/logo_nc.png \
+    assets/n_c_icon.png \
+    assets/nc_icon.png \
     assets/nc_logo.png \
+    assets/ship_destroyed_horizontal.png \
+    assets/ship_destroyed_vertical.png \
     assets/ships/blue_ship_1.png \
     assets/ships/blue_ship_2.png \
     assets/ships/blue_ship_3.png \

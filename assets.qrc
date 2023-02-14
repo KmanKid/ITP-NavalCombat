@@ -28,5 +28,8 @@
         <file>assets/gridcell_red_full.png</file>
         <file>assets/gridcell_red_hit.png</file>
         <file>assets/gridcell_blue_full_preview.png</file>
+        <file>assets/ship_destroyed_horizontal.png</file>
+        <file>assets/ship_destroyed_vertical.png</file>
+        <file>assets/nc_icon.png</file>
     </qresource>
 </RCC>
