@@ -34,6 +34,7 @@ private:
     int shipTempX = 0;
     int shipTempY = 0;
     bool isSelctingShip = false;
+    bool isMyTurn = false;
     void sendShip(int x, int y,int size, int orientation, int shipNumber);
     void togglePreview(int x, int y, int size, bool remove = false,int pSNumber = 0);
 };

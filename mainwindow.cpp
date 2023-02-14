@@ -38,17 +38,29 @@ void MainWindow::youHaveGotMail(QString message)
     {
         this->setFieldState(mSplit[1],mSplit[2].toInt(),mSplit[3].toInt(),mSplit[4].toInt());
     }
+    if(mSplit[0] == "yourTurn")
+    {
+        this->isMyTurn = true;
+    }
+    if(mSplit[0] == "notYourTurn")
+    {
+        this->isMyTurn = false;
+    }
 }
 
 void MainWindow::shoot()
 {
-    GridCell* buttonSender = qobject_cast<GridCell*>(sender());
-    buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
-    //send the coordinates to the server
-    buttonSender->state = 0;
-    QString message = QString("shot-"+QString::number(buttonSender->x)
-                             +"-"+QString::number(buttonSender->y));
-    client.sendTextMessage(message);
+    if(isMyTurn)
+    {
+        GridCell* buttonSender = qobject_cast<GridCell*>(sender());
+        //buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
+        //send the coordinates to the server
+        buttonSender->state = 0;
+        QString message = QString("shoot-"+QString::number(buttonSender->x)
+                                 +"-"+QString::number(buttonSender->y));
+        client.sendTextMessage(message);
+    }
+
 }
 
 void MainWindow::setFieldState(QString side,int x, int y, int state)
