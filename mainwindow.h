@@ -37,5 +37,6 @@ private:
     bool isMyTurn = false;
     void sendShip(int x, int y,int size, int orientation, int shipNumber);
     void togglePreview(int x, int y, int size, bool remove = false,int pSNumber = 0);
+    void showTextOnLabel(QString s);
 };
 #endif // MAINWINDOW_H

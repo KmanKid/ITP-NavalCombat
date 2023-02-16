@@ -45,6 +45,7 @@ DISTFILES += \
     assets/nc_icon.png \
     assets/nc_logo.png \
     assets/ship_destroyed_horizontal.png \
+    assets/ship_destroyed_single.png \
     assets/ship_destroyed_vertical.png \
     assets/ships/blue_ship_1.png \
     assets/ships/blue_ship_2.png \

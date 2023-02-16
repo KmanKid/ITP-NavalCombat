@@ -46,6 +46,10 @@ void MainWindow::youHaveGotMail(QString message)
     {
         this->isMyTurn = false;
     }
+    if(mSplit[0] == "setText")
+    {
+        this->showTextOnLabel(mSplit[1]);
+    }
 }
 
 void MainWindow::shoot()
@@ -91,6 +95,15 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
             break;
         case 7:
             iconPath = ":/assets/gridcell_blue_full_preview.png";
+            break;
+        case 8:
+            iconPath = ":/assets/ship_destroyed_horizontal.png";
+            break;
+        case 9:
+            iconPath = ":/assets/ship_destroyed_vertical.png";
+            break;
+        case 10:
+            iconPath = ":/assets/ship_destroyed_single.png";
             break;
         default:
             iconPath = ":/assets/grid_cell_empty.png";
@@ -260,6 +273,11 @@ void MainWindow::sendShip(int x, int y,int size, int orientation, int number)
                              +"-"+QString::number(orientation)
                              +"-"+QString::number(number));
     client.sendTextMessage(message);
+}
+
+void MainWindow::showTextOnLabel(QString s)
+{
+    this->ui->manual->setText(s);
 }
 
 MainWindow::~MainWindow()

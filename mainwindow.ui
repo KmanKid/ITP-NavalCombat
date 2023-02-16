@@ -410,7 +410,11 @@
     <property name="font">
      <font>
       <family>Fira Code</family>
+      <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255)</string>
     </property>
     <property name="text">
      <string/>

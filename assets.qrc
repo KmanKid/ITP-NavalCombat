@@ -31,5 +31,6 @@
         <file>assets/ship_destroyed_horizontal.png</file>
         <file>assets/ship_destroyed_vertical.png</file>
         <file>assets/nc_icon.png</file>
+        <file>assets/ship_destroyed_single.png</file>
     </qresource>
 </RCC>
