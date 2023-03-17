@@ -22,21 +22,34 @@ public:
     GridCell* gridRight[10][10];
 
 public slots:
+    //Schussfunktion
     void shoot();
+    //Message-Handling von bekommenen Nachrichten
     void youHaveGotMail(QString message);
+    //Status und icon der Gridcell wird gesetzt
     void setFieldState(QString side,int x, int y, int state);
+    //Funktion zum wählen der Schiffpositionen
     void selectShips();
 
 private:
+    //Das Fenster
     Ui::MainWindow *ui;
+    //Der client socket für die Kommunikation mit dem Server
     QWebSocket client;
+    //Wie viele Schiffe schon Platziert wurden
     int shipNumber = 0;
+    //Temporäres speichern der Koordinaten
     int shipTempX = 0;
     int shipTempY = 0;
+    //Ist der Spieler immernoch am Schiffe platzieren
     bool isSelctingShip = false;
+    //Ist es gerade mein Zug?
     bool isMyTurn = false;
+    //Sende das platzierte Schiff an den Server
     void sendShip(int x, int y,int size, int orientation, int shipNumber);
+    //Hilfsfunktion zur anzeige der Schiffsplatzierungsmarker
     void togglePreview(int x, int y, int size, bool remove = false,int pSNumber = 0);
+    //Dient der Anzeige des Textes
     void showTextOnLabel(QString s);
 };
 #endif // MAINWINDOW_H

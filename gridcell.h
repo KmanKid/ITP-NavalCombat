@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QTcpServer>
 
+// Die Klasse erweitert den Pushbutton um eine x und y coordinate und einen state
 class GridCell : public QPushButton
 {
     Q_OBJECT
@@ -12,7 +13,6 @@ public:
     int x;
     int y;
     int state;
-    //property for field status
 };
 
 #endif // GRIDCELL_H

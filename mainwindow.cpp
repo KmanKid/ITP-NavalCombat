@@ -1,64 +1,79 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+//MainWindow implementiert QMainWindow und Ui
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    //Der Socket öffnet localhost:8888
     client.open(QUrl("ws://127.0.0.1:8888"));
+    //Der Socket wird die youHaveGotMail Funktion aufrufen wenn er eine Nachricht bekommt
     connect(&client, &QWebSocket::textMessageReceived,this, &MainWindow::youHaveGotMail);
+    //Das User Interface wird vorbereitet
     ui->setupUi(this);
+    //Im folgenden werden die Beiden Spielfeld
     for (int x = 0; x < 10; x++)
     {
         for (int y = 0; y < 10; y ++)
         {
-            //Left grid for Player to place ships and see where enemy shot at
+            //Das Linke Raster/Spielfeld wird erzeugt
             this->gridLeft[x][y] = new GridCell(this,x,y);
+            //Die Werte für Größen etc. entstammen dem Mockup
             this->gridLeft[x][y]->setGeometry(QRect(44+(x*40),155+(y*40),40,40));
             this->gridLeft[x][y]->setIcon(QIcon(QPixmap(":/assets/grid_cell_empty.png")));
             this->gridLeft[x][y]->setIconSize(QSize(40,40));
+            //Das linke Spielfeld wird bei klicken die selectShips Funktion aufrufen
             connect(gridLeft[x][y], SIGNAL(clicked()),this, SLOT(selectShips()));
 
-            //Right grid to shoot at enemy
+            //Das Rechte Raster/Spielfeld wird erzeugt
             this->gridRight[x][y] = new GridCell(this,x,y);
+            //Die Werte für Größen etc. entstammen dem Mockup
             this->gridRight[x][y]->setGeometry(QRect(556 +(x*40),155+(y*40),40,40));
             this->gridRight[x][y]->setIcon(QIcon(QPixmap(":/assets/grid_cell_empty.png")));
             this->gridRight[x][y]->setIconSize(QSize(40,40));
+            //Das Rechte Spielfeld wird bei klicken die shoot Funktion aufrufen
             connect(gridRight[x][y], SIGNAL(clicked()),this, SLOT(shoot()));
         }
     }
 }
 
+//Diese Methode verarbeitet die vom Server geschickten Nachrichten
 void MainWindow::youHaveGotMail(QString message)
 {
-    qDebug() << message;
-    // e.g sFS-left-0-0-2
+    //Die Nachrichten werden an - getrennt, somit kann man verschiedene Parameter erkennen
     QStringList mSplit = message.split("-");
+
+    //Hier könnte man auch switch case benutzen
     if(mSplit[0] == "setFieldState")
     {
+        //setField bekommt als Eingabe Parameter die Seite, x und y Koordinaten und den status
         this->setFieldState(mSplit[1],mSplit[2].toInt(),mSplit[3].toInt(),mSplit[4].toInt());
     }
     if(mSplit[0] == "yourTurn")
     {
+        //Dieser Client ist an der Reihe
         this->isMyTurn = true;
     }
     if(mSplit[0] == "notYourTurn")
     {
+        //Dieser Client ist nicht mehr an der Reihe
         this->isMyTurn = false;
     }
     if(mSplit[0] == "setText")
     {
+        //Der Text des Labels unterhalb des Logos wird auf den Wert nach dem - gesezt
         this->showTextOnLabel(mSplit[1]);
     }
 }
 
+//Diese Funktion vearbeitet den Klick auf ein rechtes Feld und schickt die Koordinaten zum Server
 void MainWindow::shoot()
 {
+    // Wenn ich an der Reihe bin darf ich schießen
     if(isMyTurn)
     {
         GridCell* buttonSender = qobject_cast<GridCell*>(sender());
-        //buttonSender->setIcon(QIcon(QPixmap(":/assets/grid_cell_miss.png")));
-        //send the coordinates to the server
         buttonSender->state = 0;
         QString message = QString("shoot-"+QString::number(buttonSender->x)
                                  +"-"+QString::number(buttonSender->y));
@@ -67,6 +82,7 @@ void MainWindow::shoot()
 
 }
 
+//Durch diese Funktion kann eine Gridcell den entsprechenden Status erhalten
 void MainWindow::setFieldState(QString side,int x, int y, int state)
 {
     QString iconPath = "";
@@ -123,6 +139,7 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
 
 }
 
+//Die Schiffe auswählen
 void MainWindow::selectShips()
 {
     GridCell* buttonSender = qobject_cast<GridCell*>(sender());
