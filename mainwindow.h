@@ -24,7 +24,7 @@ public:
 public slots:
     //Schussfunktion
     void shoot();
-    //Message-Handling von bekommenen Nachrichten
+    //Message-Handling von erhaltenen Nachrichten
     void youHaveGotMail(QString message);
     //Status und icon der Gridcell wird gesetzt
     void setFieldState(QString side,int x, int y, int state);

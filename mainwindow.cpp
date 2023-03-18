@@ -85,7 +85,9 @@ void MainWindow::shoot()
 //Durch diese Funktion kann eine Gridcell den entsprechenden Status erhalten
 void MainWindow::setFieldState(QString side,int x, int y, int state)
 {
+    //Anlegen des Pfades zu der icon ressource
     QString iconPath = "";
+    //Abhängig des status wird das jeweilige Icon gesetzt
     switch(state)
     {
         case 0:
@@ -125,6 +127,7 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
             iconPath = ":/assets/grid_cell_empty.png";
     }
 
+    //Nun wird entweder das Feld in der linken oder der rechten Seite gesetzt
     if(side == "left")
     {
         gridLeft[x][y]->setIcon(QIcon(QPixmap(iconPath)));
@@ -142,148 +145,198 @@ void MainWindow::setFieldState(QString side,int x, int y, int state)
 //Die Schiffe auswählen
 void MainWindow::selectShips()
 {
+    //Der Button sender wird zu einem GridCell Object gecastet
     GridCell* buttonSender = qobject_cast<GridCell*>(sender());
+    //x und y Koordinaten sind die der Gridcell die ausgewählt wurde
     int x = buttonSender->x;
     int y = buttonSender->y;
     int shipSize = 0;
+    //Für die Vorschau wird der status 7 gesetzt
     int previewStateNumber = 7;
+    //Die ersten 4 Schiffe haben die Länge 1
     if (shipNumber <= 3)
     {
         shipSize = 1;
     }
+    //Die nächsten 3 Schiffe haben die länge 2
     if (shipNumber > 3 && shipNumber <= 6)
     {
         shipSize = 2;
     }
+    //Die nächsten 2 Schiffe haben die Länge 3
     if (shipNumber > 6 && shipNumber <= 8)
     {
         shipSize = 3;
     }
+    //Das letzte Schiff hat die Länge 4
     if (shipNumber == 9)
     {
         shipSize = 4;
     }
+    //Nur wenn es noch Schiffe zu platzieren gibt
+    //und das ausgewählte Feld kein Vorschaufeld geht es weiter
     if (!(shipNumber > 9) && buttonSender->state != previewStateNumber)
     {
-
+        //Wenn der Spieler noch kein Feld für den Schiffanfang ausgewählt hat
         if(!isSelctingShip)
         {
-            //Player wants to select a ship now --> store x and y for preview removal
+            //Speichern der x und y Koordinaten, also den Startpunkt des Schiffes
             shipTempX = x;
             shipTempY = y;
+            //Nun ist der Spieler am auswählen des Schiffes
             isSelctingShip = true;
             this->setFieldState("left",x,y,previewStateNumber);
+            //Wenn die Schiffsgröße 1 ist dann ist jetzt schon das Schiff platziert
             if(shipSize == 1)
             {
                 isSelctingShip = false;
-                sendShip(x,y,shipSize,0,shipNumber); //implementation needed
+                //Sende das Schiff an den Server
+                sendShip(x,y,shipSize,0,shipNumber);
                 shipNumber++;
             }else
             {
+                //Die Vorschaufelder müssen angezeigt werden
                 togglePreview(x, y, shipSize, false,previewStateNumber);
             }
         }else
         {
-            bool valid = (shipTempX == x || shipTempY == y); // further validate --> accurate koordinates not just axis
+            //Entweder auf der x oder y Achse die gleiche Koordinate
+            bool valid = (shipTempX == x || shipTempY == y);
+            //Entweder nach links oder Rechts auf dem in der Vorschau angezeigten Feld
             bool validOnXCoord = (x + shipSize-1 == shipTempX) || (x - shipSize+1 == shipTempX);
+            //Entweder nach oben oder Unten auf dem in der Vorschau angezeigten Feld
             bool validOnYCoord = (y + shipSize-1 == shipTempY) || (y - shipSize+1 == shipTempY);
 
+            //Wenn die Validierung erfolgreich war
             if(valid && (validOnXCoord || validOnYCoord))
             {
+                //Die Vorschau wieder ausblenden
                 togglePreview(shipTempX, shipTempY, shipSize, true,previewStateNumber);
-                qDebug() << x  << ":" << y;
-                qDebug() << shipTempX << ":" << shipTempY;
+                //Wenn das Schiff vertikal gesetzt werden soll
                 if(shipTempX == x)
                 {
+                    //.. muss man in positiver y Richtung
                     if (shipTempY < y)
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
+                            //.. die Felder als Vorschau anzeigen
                             this->setFieldState("left",shipTempX,shipTempY+i,previewStateNumber);
                         }
+                        //Das Schiff an den Server senden
                         sendShip(shipTempX,shipTempY,shipSize,1,shipNumber);
-                    }else
+                    }
+                    //.. analog in negativer y Richtung
+                    else
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
+                            //.. die Felder als Vorschau anzeigen
                             this->setFieldState("left",shipTempX,shipTempY-i,previewStateNumber);
                         }
+                        //Das Schiff an den Server senden
                         sendShip(x,y,shipSize,1,shipNumber);
                     }
                 }
+                //Wenn es hotizontal liegen soll
                 if(shipTempY == y)
                 {
+                    //In positiver x Richtung
                     if (shipTempX < x)
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
+                            //Die Felder als Vorschau auffüllen
                             this->setFieldState("left",shipTempX+i,shipTempY,previewStateNumber);
                         }
+                        //Das Schiff zum Server senden
                         sendShip(shipTempX,shipTempY,shipSize,0,shipNumber);
-                    }else
+                    }
+                    //In negativer x Richtung
+                    else
                     {
                         for (int i = 0; i < shipSize; i++)
                         {
+                            //Die Felder als Vorschau auffüllen
                             this->setFieldState("left",shipTempX-i,shipTempY,previewStateNumber);
                         }
+                        //Das Schiff zu dem Server schicken
                         sendShip(x,y,shipSize,0,shipNumber);
                     }
 
                 }
+                //Das Schiff wurde platziert
                 isSelctingShip = false;
-                //implementation needed
                 shipNumber++;
             }
         }
     }
 }
 
+//Zeigt beim setzten des Schiffes die Möglichen Felder an
 void MainWindow::togglePreview(int x, int y, int size, bool remove,int pSNumber)
 {
+    //Ein blaues Schiff hat den Status 2
     int blueShip = 2;
+    //Der Status der Vorschau beim setzten ist 6
     int state = 6;
+    //Wenn die Vorschau gelöscht werden soll ist der Status der einer empty Grid-Cell
     if (remove)
     {
         state = 0;
     }
+    //Die preview Koordinaten in Abhängigkeit der Achsen setzten
     int previewXPlus = x + size -1;
     int previewXMinus = x - size +1;
     int previewYPlus = y + size -1;
     int previewYMinus = y - size +1;
+
+    //Nur wenn das positive x-Vorschaufeld innerhalb des Spielfeldes liegt
     if (previewXPlus >= 0 && previewXPlus < 10)
     {
+        //..und das Feld kein SchiffsvorschauFeld und kein Schiff Feld ist
         if(gridLeft[previewXPlus][y]->state != pSNumber && gridLeft[previewXPlus][y]->state != blueShip)
         {
+            //..setze den Preview state
             this->setFieldState("left",previewXPlus,y,state);
         }
     }
+    //Nur wenn das negative x-Vorschaufeld innerhalb des Spielfeldes liegt
     if (previewXMinus >= 0 && previewXMinus < 10)
     {
+        //..und das Feld kein SchiffsvorschauFeld und kein Schiff Feld ist
         if(gridLeft[previewXMinus][y]->state != pSNumber && gridLeft[previewXMinus][y]->state != blueShip)
         {
+            //..setze den Preview state
             this->setFieldState("left",previewXMinus,y,state);
         }
     }
+    //Nur wenn das positive y-Vorschaufeld innerhalb des Spielfeldes liegt
     if (previewYPlus >= 0 && previewYPlus < 10)
     {
+        //..und das Feld kein SchiffsvorschauFeld und kein Schiff Feld ist
         if(gridLeft[x][previewYPlus]->state != pSNumber && gridLeft[x][previewYPlus]->state != blueShip)
         {
+            //..setze den Preview state
             this->setFieldState("left",x,previewYPlus,state);
         }
     }
+    //Nur wenn das negative y-Vorschaufeld innerhalb des Spielfeldes liegt
     if (previewYMinus >= 0 && previewYMinus < 10)
     {
+        //..und das Feld kein SchiffsvorschauFeld und kein Schiff Feld ist
         if(gridLeft[x][previewYMinus]->state != pSNumber && gridLeft[x][previewYMinus]->state != blueShip)
         {
+            //..setze den Preview state
             this->setFieldState("left",x,previewYMinus,state);
         }
     }
 }
 
+//Sendet das Schiff zu dem Server
 void MainWindow::sendShip(int x, int y,int size, int orientation, int number)
 {
-    //send ship to server, so that he can store it
-    //server needs
+    //Es wird eine Message gebaut die alle Informationen enthält
     QString message = QString("newShip-"+QString::number(x)
                              +"-"+QString::number(y)
                              +"-"+QString::number(size)
@@ -292,11 +345,13 @@ void MainWindow::sendShip(int x, int y,int size, int orientation, int number)
     client.sendTextMessage(message);
 }
 
+//Diese Funktion zeigt den eingegebenen String an
 void MainWindow::showTextOnLabel(QString s)
 {
     this->ui->manual->setText(s);
 }
 
+//Destruktor
 MainWindow::~MainWindow()
 {
     delete ui;
