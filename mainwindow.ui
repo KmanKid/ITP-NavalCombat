@@ -97,6 +97,85 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="feindFunkTitle">
+    <property name="geometry">
+     <rect>
+      <x>556</x>
+      <y>556</y>
+      <width>383</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white</string>
+    </property>
+    <property name="text">
+     <string>Feindlicher Funk:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="feindFunk">
+    <property name="geometry">
+     <rect>
+      <x>556</x>
+      <y>586</y>
+      <width>383</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="freundFunkTitle">
+    <property name="geometry">
+     <rect>
+      <x>44</x>
+      <y>556</y>
+      <width>383</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white</string>
+    </property>
+    <property name="text">
+     <string>Freundlicher Funk:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="freundFunk">
+    <property name="geometry">
+     <rect>
+      <x>44</x>
+      <y>586</y>
+      <width>383</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

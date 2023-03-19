@@ -30,6 +30,8 @@ public slots:
     void setFieldState(QString side,int x, int y, int state);
     //Funktion zum wählen der Schiffpositionen
     void selectShips();
+    //Sende den Funk zu dem Server
+    void sendFunk(QString message);
 
 private:
     //Das Fenster

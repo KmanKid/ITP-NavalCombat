@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&client, &QWebSocket::textMessageReceived,this, &MainWindow::youHaveGotMail);
     //Das User Interface wird vorbereitet
     ui->setupUi(this);
+    //Connect the editField to send content to server on Edit finished
+    connect(ui->freundFunk, &QLineEdit::textChanged, this, &MainWindow::sendFunk);
     //Im folgenden werden die Beiden Spielfeld
     for (int x = 0; x < 10; x++)
     {
@@ -64,6 +66,11 @@ void MainWindow::youHaveGotMail(QString message)
     {
         //Der Text des Labels unterhalb des Logos wird auf den Wert nach dem - gesezt
         this->showTextOnLabel(mSplit[1]);
+    }
+    if(mSplit[0] == "setFeindFunk")
+    {
+        //setzt den Text des Gegenspielers auf das soeben getippte
+        this->ui->feindFunk->setText(mSplit[1]);
     }
 }
 
@@ -349,6 +356,12 @@ void MainWindow::sendShip(int x, int y,int size, int orientation, int number)
 void MainWindow::showTextOnLabel(QString s)
 {
     this->ui->manual->setText(s);
+}
+
+//Sende den Funk an den Server
+void MainWindow::sendFunk(QString funk)
+{
+    client.sendTextMessage("funk-"+funk);
 }
 
 //Destruktor
