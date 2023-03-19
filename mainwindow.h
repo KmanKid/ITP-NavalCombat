@@ -32,6 +32,8 @@ public slots:
     void selectShips();
     //Sende den Funk zu dem Server
     void sendFunk(QString message);
+    //Sende den Namen an den Server
+    void sendName(QString name);
 
 private:
     //Das Fenster

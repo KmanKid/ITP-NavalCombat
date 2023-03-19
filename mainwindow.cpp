@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //Connect the editField to send content to server on Edit finished
     connect(ui->freundFunk, &QLineEdit::textChanged, this, &MainWindow::sendFunk);
+    //Connect the editField to send content to server on Edit finished
+    connect(ui->nameInput, &QLineEdit::textChanged, this, &MainWindow::sendName);
     //Im folgenden werden die Beiden Spielfeld
     for (int x = 0; x < 10; x++)
     {
@@ -362,6 +364,11 @@ void MainWindow::showTextOnLabel(QString s)
 void MainWindow::sendFunk(QString funk)
 {
     client.sendTextMessage("funk-"+funk);
+}
+
+void MainWindow::sendName(QString name)
+{
+    client.sendTextMessage("name-"+name);
 }
 
 //Destruktor
