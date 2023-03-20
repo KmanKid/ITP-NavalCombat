@@ -179,7 +179,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: white</string>
+     <string notr="true">color: white; border: 1px solid; border-color: rgb(255, 200, 87);</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nameInput">
@@ -198,7 +198,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: white</string>
+     <string notr="true">color: white; border: 1px solid; border-color: rgb(255, 200, 87);</string>
     </property>
    </widget>
    <widget class="QLabel" name="name">
